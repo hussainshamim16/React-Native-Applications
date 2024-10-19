@@ -16,37 +16,43 @@ import { TextInput } from 'react-native-gesture-handler'
 const index = () => {
   const [Inputvalue, setInputvalue] = useState('')
   const [editVali, seteditVali] = useState('')
-  const [TodoAdder, setTodoAdder] = useState(["hussain"])
+  const [TodoAdder, setTodoAdder] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(null); // Track the index of the todo being edited
 
   //  Add Todo
   const AddingTodo = () => {
-    TodoAdder.push(Inputvalue)
-    console.log("Add Todo", TodoAdder)
-    setInputvalue('')
+    setTodoAdder([...TodoAdder, Inputvalue]);
+    console.log("Add Todo", TodoAdder);
+    setInputvalue('');
+  };
 
-  }
+  // open modal
+  const openModal = (index) => {
+    setCurrentIndex(index); // Set the current index of the todo being edited
+    seteditVali(TodoAdder[index]); // Pre-fill the input with the selected todo's value
+    setModalVisible(true);
+  };
 
-  // Edite Todo
+  // Edit Todo
   const EditeTodo = () => {
-
-    console.log("EditeTodo", editVali)
-  }
+    if (currentIndex !== null) {
+      TodoAdder[currentIndex] = editVali; // Update the correct todo item
+      setTodoAdder([...TodoAdder]);
+      seteditVali('');
+      setModalVisible(false);
+    }
+  };
 
   // Delete Todo
-  const DeleteTodo = (e) => {
-    console.log("DeleteTodo", e)
-
-    TodoAdder.splice(e, 1)
-    setTodoAdder([...TodoAdder])
-
-  }
+  const DeleteTodo = (index) => {
+    TodoAdder.splice(index, 1);
+    setTodoAdder([...TodoAdder]);
+  };
 
   return (
     <SafeAreaView style={styles.boody}>
-      <Text style={styles.Headinger}>
-        TODO LIST
-      </Text>
+      <Text style={styles.Headinger}>TODO LIST</Text>
       <TextInput
         style={styles.input}
         placeholder='Enter Task'
@@ -59,110 +65,78 @@ const index = () => {
         activeOpacity={0.8}
         onPress={AddingTodo}
       >
-        <Text style={styles.press}
-        >Add Todo</Text>
+        <Text style={styles.press}>Add Todo</Text>
       </TouchableOpacity>
-
 
       <FlatList
         data={TodoAdder}
         style={styles.List}
         renderItem={({ item, index }) => {
-          return <View style={styles.it}>
-            <Text style={styles.textLi}>
-              {item}
-            </Text>
+          return (
+            <View style={styles.it}>
+              <Text style={styles.textLi}>{item}</Text>
 
+              {/* Edit button */}
+              <TouchableOpacity
+                style={styles.buttonE}
+                activeOpacity={0.8}
+                onPress={() => openModal(index)} // Pass the correct index
+              >
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
 
-            {/* edit button */}
-            <TouchableOpacity
-              style={styles.buttonE}
-              activeOpacity={0.8}
-              // onPress={EditeTodo}
-              onPress={() => setModalVisible(true)}
-            >
-              <Text style={{
-                color: "black",
-                fontWeight: 700,
-                fontSize: 12,
+              <TouchableOpacity
+                style={styles.buttonE}
+                activeOpacity={0.8}
+                onPress={() => DeleteTodo(index)}
+              >
+                <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity>
 
+              {/* Modal for editing */}
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Edit</Text>
 
-              }}
-              >Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonE}
-              activeOpacity={0.8}
-              onPress={() => DeleteTodo(index)}
-            >
-              <Text style={{
-                color: "black",
-                fontWeight: 700,
-                fontSize: 12,
+                    <TextInput
+                      style={styles.input}
+                      placeholder='Edit Value'
+                      onChangeText={seteditVali}
+                      value={editVali}
+                    />
 
-
-              }}
-              >Delete</Text>
-            </TouchableOpacity>
-
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setModalVisible(!modalVisible);
-              }}>
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalText}>Edit</Text>
-
-
-                  <TextInput
-                    style={styles.input}
-                    placeholder='Edite Value'
-                    onChangeText={seteditVali}
-                    value={editVali}
-                  />
-
-                  <View
-                    style={
-                      {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
-                        flexDirection: 'row',
-                        // backgroundColor: "red",
-                        width: 250,
-                      }
-                    }
-                  >
-                    <Pressable
-                      style={[styles.button, styles.buttonClose]}
-                      onPress={EditeTodo}>
-                      <Text style={styles.textStyle}>Save</Text>
-                    </Pressable>
-                    <Pressable
-                      style={[styles.button, styles.buttonClose]}
-                      onPress={() => setModalVisible(!modalVisible)}>
-                      <Text style={styles.textStyle}>Cencel</Text>
-                    </Pressable>
+                    <View style={styles.modalButtonContainer}>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={EditeTodo}
+                      >
+                        <Text style={styles.textStyle}>Save</Text>
+                      </Pressable>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setModalVisible(!modalVisible)}
+                      >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                      </Pressable>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Modal>
-          </View>
-
-
+              </Modal>
+            </View>
+          );
         }}
-      >
-
-      </FlatList>
+      />
     </SafeAreaView>
-
-
-  )
-}
+  );
+};
 
 // adding Css 
 const styles = StyleSheet.create({

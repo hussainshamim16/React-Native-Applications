@@ -5,6 +5,9 @@ import {
   TouchableOpacity,
   FlatList,
   StatusBar,
+  Alert,
+  Modal,
+  Pressable,
 } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -12,12 +15,30 @@ import { TextInput } from 'react-native-gesture-handler'
 
 const index = () => {
   const [Inputvalue, setInputvalue] = useState('')
-  const [TodoAdder, setTodoAdder] = useState([])
-  const AddingTodo = () => {
+  const [editVali, seteditVali] = useState('')
+  const [TodoAdder, setTodoAdder] = useState(["hussain"])
+  const [modalVisible, setModalVisible] = useState(false);
 
+  //  Add Todo
+  const AddingTodo = () => {
     TodoAdder.push(Inputvalue)
     console.log("Add Todo", TodoAdder)
     setInputvalue('')
+
+  }
+
+  // Edite Todo
+  const EditeTodo = () => {
+
+    console.log("EditeTodo", editVali)
+  }
+
+  // Delete Todo
+  const DeleteTodo = (e) => {
+    console.log("DeleteTodo", e)
+
+    TodoAdder.splice(e, 1)
+    setTodoAdder([...TodoAdder])
 
   }
 
@@ -57,33 +78,82 @@ const index = () => {
             <TouchableOpacity
               style={styles.buttonE}
               activeOpacity={0.8}
-              // onPress={AddingTodo}
+              // onPress={EditeTodo}
+              onPress={() => setModalVisible(true)}
             >
               <Text style={{
                 color: "black",
                 fontWeight: 700,
                 fontSize: 12,
-               
-                
+
+
               }}
               >Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonE}
               activeOpacity={0.8}
-              // onPress={AddingTodo}
+              onPress={() => DeleteTodo(index)}
             >
               <Text style={{
                 color: "black",
                 fontWeight: 700,
                 fontSize: 12,
-          
-               
+
+
               }}
               >Delete</Text>
             </TouchableOpacity>
 
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setModalVisible(!modalVisible);
+              }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>Edit</Text>
+
+
+                  <TextInput
+                    style={styles.input}
+                    placeholder='Edite Value'
+                    onChangeText={seteditVali}
+                    value={editVali}
+                  />
+
+                  <View
+                    style={
+                      {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                        flexDirection: 'row',
+                        // backgroundColor: "red",
+                        width: 250,
+                      }
+                    }
+                  >
+                    <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={EditeTodo}>
+                      <Text style={styles.textStyle}>Save</Text>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => setModalVisible(!modalVisible)}>
+                      <Text style={styles.textStyle}>Cencel</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </View>
+            </Modal>
           </View>
+
+
         }}
       >
 
@@ -144,7 +214,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between"
-    ,flexDirection: "row",
+    , flexDirection: "row",
     marginTop: 10,
     backgroundColor: "black",
     padding: 10,
@@ -156,6 +226,38 @@ const styles = StyleSheet.create({
     fontFamily: "sans-serif",
     color: "white",
     fontWeight: 800
-  }
+  },
+  modalView: {
+    marginTop: 80,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 17,
+    textTransform: 'uppercase'
+  },
 })
 export default index

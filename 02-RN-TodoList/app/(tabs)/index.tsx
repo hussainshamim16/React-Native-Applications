@@ -1,13 +1,26 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  StatusBar,
+} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TextInput } from 'react-native-gesture-handler'
 
 const index = () => {
   const [Inputvalue, setInputvalue] = useState('')
-  const inputEver = () => {
-console.log("Add Todo")
+  const [TodoAdder, setTodoAdder] = useState([])
+  const AddingTodo = () => {
+
+    TodoAdder.push(Inputvalue)
+    console.log("Add Todo", TodoAdder)
+    setInputvalue('')
+
   }
+
   return (
     <SafeAreaView style={styles.boody}>
       <Text style={styles.Headinger}>
@@ -16,8 +29,8 @@ console.log("Add Todo")
       <TextInput
         style={styles.input}
         placeholder='Enter Task'
-        onChangeText={inputEver}
-      // value={}
+        onChangeText={setInputvalue}
+        value={Inputvalue}
       />
 
       <TouchableOpacity
@@ -25,9 +38,26 @@ console.log("Add Todo")
         //  onPress={onPress}
         activeOpacity={0.8}
       >
-        <Text style={styles.press}>Add Todo</Text>
+        <Text style={styles.press}
+          onPress={AddingTodo}
+        >Add Todo</Text>
       </TouchableOpacity>
+
+
+      <FlatList
+        data={TodoAdder}
+        style={styles.List}
+        renderItem={({ item, index }) => {
+          return <view style={styles.it}>
+            <text style={{fontSize: 17, fontFamily: "sans-serif", fontWeight: 800}}>{item}</text>
+          </view>
+        }}
+      >
+        <text>hello</text>
+      </FlatList>
     </SafeAreaView>
+
+
   )
 }
 
@@ -62,6 +92,16 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: 700,
     fontSize: 18,
+  },
+  List: {
+    marginHorizontal: 10,
+    color: "white",
+  },
+  it: {
+    marginTop: 10,
+    backgroundColor: "black",
+    padding : 10,
+
   }
 })
 export default index

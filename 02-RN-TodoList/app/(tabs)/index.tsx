@@ -16,28 +16,32 @@ import { TextInput } from 'react-native-gesture-handler'
 const index = () => {
   const [Inputvalue, setInputvalue] = useState('')
   const [editVali, seteditVali] = useState('')
-  const [TodoAdder, setTodoAdder] = useState([])
+  const [TodoAdder, setTodoAdder] = useState(["dev"])
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(null); // Track the index of the todo being edited
+  const [currentIndex, setCurrentIndex] = useState(null);
 
   //  Add Todo
   const AddingTodo = () => {
+    if (!Inputvalue) {
+      alert("Enter Todo Value")
+      return
+    }
     setTodoAdder([...TodoAdder, Inputvalue]);
-    console.log("Add Todo", TodoAdder);
+    // console.log("Add Todo", TodoAdder);
     setInputvalue('');
   };
 
   // open modal
   const openModal = (index) => {
-    setCurrentIndex(index); // Set the current index of the todo being edited
-    seteditVali(TodoAdder[index]); // Pre-fill the input with the selected todo's value
+    setCurrentIndex(index);
+    seteditVali(TodoAdder[index]);
     setModalVisible(true);
   };
 
   // Edit Todo
   const EditeTodo = () => {
     if (currentIndex !== null) {
-      TodoAdder[currentIndex] = editVali; // Update the correct todo item
+      TodoAdder[currentIndex] = editVali;
       setTodoAdder([...TodoAdder]);
       seteditVali('');
       setModalVisible(false);
@@ -77,21 +81,29 @@ const index = () => {
               <Text style={styles.textLi}>{item}</Text>
 
               {/* Edit button */}
-              <TouchableOpacity
-                style={styles.buttonE}
-                activeOpacity={0.8}
-                onPress={() => openModal(index)} // Pass the correct index
+              <View
+              style={{
+                display:"flex",
+                flexDirection: "row",
+                // backgroundColor: "red",
+              }}
               >
-                <Text style={styles.buttonText}>Edit</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonE}
+                  activeOpacity={0.8}
+                  onPress={() => openModal(index)}
+                >
+                  <Text style={styles.buttonText}>Edit</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.buttonE}
-                activeOpacity={0.8}
-                onPress={() => DeleteTodo(index)}
-              >
-                <Text style={styles.buttonText}>Delete</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonE}
+                  activeOpacity={0.8}
+                  onPress={() => DeleteTodo(index)}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
 
               {/* Modal for editing */}
               <Modal
@@ -102,6 +114,7 @@ const index = () => {
                   setModalVisible(!modalVisible);
                 }}
               >
+                {/* modal */}
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                     <Text style={styles.modalText}>Edit</Text>
@@ -113,7 +126,14 @@ const index = () => {
                       value={editVali}
                     />
 
-                    <View style={styles.modalButtonContainer}>
+                    <View style={
+                      {
+                        display: "flex",
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                      }
+                    }>
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={EditeTodo}
@@ -162,6 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#000000',
     color: "#fff",
+    marginBottom: 20,
     marginHorizontal: 10,
     padding: 10,
   },
@@ -220,7 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'black',
   },
   textStyle: {
     color: 'white',
@@ -230,7 +251,8 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontSize: 17,
+    fontSize: 30,
+    fontWeight: 800,
     textTransform: 'uppercase'
   },
 })

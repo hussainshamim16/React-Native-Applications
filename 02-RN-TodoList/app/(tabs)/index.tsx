@@ -1,70 +1,67 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { TextInput } from 'react-native-gesture-handler'
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
-export default function HomeScreen() {
+const index = () => {
+  const [Inputvalue, setInputvalue] = useState('')
+  const inputEver = () => {
+console.log("Add Todo")
+  }
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+    <SafeAreaView style={styles.boody}>
+      <Text style={styles.Headinger}>
+        TODO LIST
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder='Enter Task'
+        onChangeText={inputEver}
+      // value={}
+      />
+
+      <TouchableOpacity
+        style={styles.button}
+        //  onPress={onPress}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.press}>Add Todo</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  )
 }
 
+// adding Css 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  boody: {
+    flex: 1,
+    padding: 20,
+    // backgroundColor: "red"
+  },
+  Headinger: {
+    fontSize: 50,
+    fontWeight: 800,
+    textAlign: "center",
+    marginVertical: 20
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    fontSize: 17,
+  },
+  button: {
     alignItems: 'center',
-    gap: 8,
+    backgroundColor: '#000000',
+    color: "#fff",
+    marginHorizontal: 10,
+    padding: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+  press: {
+    color: "white",
+    fontWeight: 700,
+    fontSize: 18,
+  }
+})
+export default index

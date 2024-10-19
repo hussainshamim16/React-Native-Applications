@@ -35,11 +35,10 @@ const index = () => {
 
       <TouchableOpacity
         style={styles.button}
-        //  onPress={onPress}
         activeOpacity={0.8}
+        onPress={AddingTodo}
       >
         <Text style={styles.press}
-          onPress={AddingTodo}
         >Add Todo</Text>
       </TouchableOpacity>
 
@@ -48,12 +47,46 @@ const index = () => {
         data={TodoAdder}
         style={styles.List}
         renderItem={({ item, index }) => {
-          return <view style={styles.it}>
-            <text style={{fontSize: 17, fontFamily: "sans-serif", fontWeight: 800}}>{item}</text>
-          </view>
+          return <View style={styles.it}>
+            <Text style={styles.textLi}>
+              {item}
+            </Text>
+
+
+            {/* edit button */}
+            <TouchableOpacity
+              style={styles.buttonE}
+              activeOpacity={0.8}
+              // onPress={AddingTodo}
+            >
+              <Text style={{
+                color: "black",
+                fontWeight: 700,
+                fontSize: 12,
+               
+                
+              }}
+              >Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonE}
+              activeOpacity={0.8}
+              // onPress={AddingTodo}
+            >
+              <Text style={{
+                color: "black",
+                fontWeight: 700,
+                fontSize: 12,
+          
+               
+              }}
+              >Delete</Text>
+            </TouchableOpacity>
+
+          </View>
         }}
       >
-        <text>hello</text>
+
       </FlatList>
     </SafeAreaView>
 
@@ -88,6 +121,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     padding: 10,
   },
+  buttonE: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    // color: "black",
+    marginHorizontal: 10,
+    padding: 10,
+    marginBottom: 4,
+    borderRadius: 5,
+    paddingHorizontal: 16,
+  },
   press: {
     color: "white",
     fontWeight: 700,
@@ -98,10 +141,21 @@ const styles = StyleSheet.create({
     color: "white",
   },
   it: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between"
+    ,flexDirection: "row",
     marginTop: 10,
     backgroundColor: "black",
-    padding : 10,
+    padding: 10,
+    paddingLeft: 30,
 
+  },
+  textLi: {
+    fontSize: 17,
+    fontFamily: "sans-serif",
+    color: "white",
+    fontWeight: 800
   }
 })
 export default index
